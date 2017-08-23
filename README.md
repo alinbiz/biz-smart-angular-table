@@ -48,7 +48,7 @@ Finally use in one of your apps components:
 import { Component } from '@angular/core';
 
 @Component({
-  template: '<hello-world></hello-world>'
+  template: '<smart-table [columnNames]="columnNames" [columnValues]="columnValues" (columnNamesChange)="columnNamesChange($event)"></smart-table>'
 })
 export class MyComponent {}
 ```
