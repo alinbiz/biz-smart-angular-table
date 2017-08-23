@@ -1,0 +1,9 @@
+{
+  "extends": "tslint-config-mwl",
+  "rules": {
+    "directive-selector": [true, "attribute", "smart-table", "camelCase"],
+    "component-selector": [true, "element", "smart-table", "kebab-case"],
+    "pipe-naming": [true, "camelCase", "smart-table"],
+    "no-inferrable-types": false
+  }
+}

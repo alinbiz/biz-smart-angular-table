@@ -1,0 +1,14 @@
+{
+  "generator-angular-library": {
+    "githubUsername": "alinbiz",
+    "githubRepoName": "biz-smart-angular-table",
+    "npmModuleName": "biz-smart-angular-table",
+    "moduleGlobal": "bizSmartAngularTable",
+    "ngModuleName": "BizSmartAngularTableModule",
+    "selectorPrefix": "smart-table",
+    "projectTitle": "Smart table for angular",
+    "projectDescription": "This is a smart table for sample angular usage",
+    "authorName": "alinbizau",
+    "packageManager": "npm"
+  }
+}
