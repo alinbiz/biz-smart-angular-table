@@ -71,3 +71,11 @@
 .min-width-70 {
     min-width: 70px;
 }
+
+.panel-default>.panel-heading {
+    background-color: #fff;
+}
+
+.panel-footer {
+     background-color: #fff;
+}

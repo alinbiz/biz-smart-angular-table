@@ -1,4 +1,4 @@
-# Smart table for angular
+# Smart table for Angular
 [![Build Status](https://travis-ci.org/alinbiz/biz-smart-angular-table.svg?branch=master)](https://travis-ci.org/alinbiz/biz-smart-angular-table)
 [![codecov](https://codecov.io/gh/alinbiz/biz-smart-angular-table/branch/master/graph/badge.svg)](https://codecov.io/gh/alinbiz/biz-smart-angular-table)
 [![npm version](https://badge.fury.io/js/biz-smart-angular-table.svg)](http://badge.fury.io/js/biz-smart-angular-table)

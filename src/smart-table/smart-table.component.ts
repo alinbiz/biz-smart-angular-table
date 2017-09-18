@@ -15,8 +15,10 @@ export class SmartTableComponent implements OnInit {
   @Input() columnNames: Array<any>;
   @Output() columnNamesChange = new EventEmitter();
   @Input() columnValues: any[] = [];
+  
 
-  objectProperties: string[] = [];
+  mandatoryObjectProperties: string[] = [];
+   objectProperties: string[] = [];
   stringColumnNames: string[] = [];
   tempColumnNames: any[] = [];
   tempColumnValues: any[] = [];
@@ -27,14 +29,17 @@ export class SmartTableComponent implements OnInit {
   pageSize: number = 2;
   totalItems: number;
   totalPages: number;
+  pageNumber: number = 1;
   pages: number[] = [];
+  emptyObject: any = {};
 
 
   ngOnInit() {
-    this.columnNames.forEach(columnNames => {
-      if (columnNames.mandatory) {
-        this.stringColumnNames.push(columnNames.fieldName);
+    this.columnNames.forEach(columnName => {
+      if (columnName.mandatory) {
+        this.stringColumnNames.push(columnName.fieldName);
       }
+      columnName.searchText= "";
     });
 
     this.totalItems = this.columnValues.length;
@@ -47,9 +52,15 @@ export class SmartTableComponent implements OnInit {
 
     this.columnValues.forEach(columnValue => {
       for (let property in columnValue) {
-        if (this.objectProperties.indexOf(property) <= -1 && this.stringColumnNames.indexOf(property) > -1)
-          this.objectProperties.push(property);
+        if (this.mandatoryObjectProperties.indexOf(property) <= -1 && this.stringColumnNames.indexOf(property) > -1) {
+          this.mandatoryObjectProperties.push(property);
+        }
+         this.objectProperties.push(property);
       }
+    });
+
+    this.objectProperties.forEach(property => {
+      this.emptyObject[property] = "";
     });
   }
 
@@ -71,7 +82,7 @@ export class SmartTableComponent implements OnInit {
     this.columnNames = Object.assign([], this.tempColumnNames);
     this.columnNamesChange.emit(this.columnNames);
 
-    this.objectProperties = [];
+    this.mandatoryObjectProperties = [];
     this.stringColumnNames = [];
 
     this.columnNames.forEach(columnNames => {
@@ -82,9 +93,13 @@ export class SmartTableComponent implements OnInit {
 
     this.columnValues.forEach(columnValue => {
       for (let property in columnValue) {
-        if (this.objectProperties.indexOf(property) <= -1 && this.stringColumnNames.indexOf(property) > -1)
-          this.objectProperties.push(property);
+        if (this.mandatoryObjectProperties.indexOf(property) <= -1 && this.stringColumnNames.indexOf(property) > -1)
+          this.mandatoryObjectProperties.push(property);
       }
+    });
+
+     this.mandatoryObjectProperties.forEach(property => {
+      this.emptyObject.property = null;
     });
 
     modal.close();
@@ -92,11 +107,16 @@ export class SmartTableComponent implements OnInit {
 
   displayFilters(): void {
     this.showFilters = !this.showFilters;
+    if(!this.showFilters) {
+      this.columnNames
+      .filter(columnName => columnName.searchText)
+      .map(columnName => columnName.searchText = "");
+    }
   }
 
-  isEditModeOn(index: any): void {
+  isEditModeOn(item: any): void {
     this.editMode = !this.editMode;
-    this.rowIndex = index;
+    this.rowIndex = this.columnValues.indexOf(item);
     this.newColumnValue = Object.assign({}, this.columnValues[this.rowIndex]);
   }
 
@@ -112,15 +132,35 @@ export class SmartTableComponent implements OnInit {
 
   delete(columnValue: any) {
     this.columnValues = this.columnValues.filter(cValue => cValue !== columnValue);
+    this.totalItems = this.columnValues.length;
+    this.totalPages = this.getPageNumbers(this.totalItems / this.pageSize);
+    this.pages = [];
+    for(let i=1; i<= this.totalPages; i++) {
+        this.pages.push(i);
+    }
+    this.pageNumber = this.totalPages;
   }
 
-  filterByField(columnName: any): void {
-    this.columnValues.filter(value => {
-      for (let property in value) {
-        if (property === columnName.fieldName) {
-          this.objectProperties.push(property);
-        }
-      }
-    })
+  changePage(pageNumber: number): void {
+    this.pageNumber = pageNumber;
+    this.editMode = false;
+  }
+
+  addNewRow(): void {
+    this.columnValues.push(this.emptyObject);
+    this.editMode = true;
+    this.rowIndex = this.columnValues.length - 1;
+    this.totalItems = this.columnValues.length;
+    this.totalPages = this.getPageNumbers(this.totalItems / this.pageSize);
+    this.pages = [];
+    for(let i=1; i<= this.totalPages; i++) {
+        this.pages.push(i);
+    }
+    this.pageNumber = this.totalPages;
+     this.newColumnValue = Object.assign({}, this.columnValues[this.rowIndex]);
+  }
+
+  updatePagination() : void {
+    this.pageNumber = this.getPageNumbers(this.columnValues.length / this.pageSize); 
   }
 }
